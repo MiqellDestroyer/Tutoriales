@@ -5,7 +5,10 @@ namespace Selection
 {
     public class SelectableUnit : MonoBehaviour
     {
+        [SerializeField]
+        private GameObject selectionIndicator;
         private bool selected = false;
+
 
         public bool IsSelected()
         {
@@ -15,11 +18,14 @@ namespace Selection
         public void SelectUnit()
         {
             selected = true;
+            selectionIndicator.SetActive(true);
         }
 
         public void DeselectUnit()
         {
             selected = false;
+            selectionIndicator.SetActive(false);
+
         }
 
         private void OnEnable()
