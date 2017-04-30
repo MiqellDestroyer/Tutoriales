@@ -90,6 +90,8 @@ namespace Selection
             selectedUnits.Clear();
         }
 
+
+
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left)
@@ -97,6 +99,7 @@ namespace Selection
                 selectionBoxImage.gameObject.SetActive(true);
                 selectionBoxRect = new Rect();
                 selectionStartPos = eventData.position;
+                Debug.Log("Called");
             }
         }
 
