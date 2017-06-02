@@ -80,6 +80,15 @@ public class DatabaseEditor : Editor {
         valueStyle.margin = new RectOffset(0, 50, 0, 0);
 
         EditorGUILayout.BeginVertical("Box");
+
+        Sprite itemSprite = item.itemImage;
+        if (itemSprite != null)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Image:" + item.itemImage.ToString());
+            EditorGUILayout.EndHorizontal();
+        }
+
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("ID: ");
         GUILayout.Label(item.id.ToString(), valueStyle);

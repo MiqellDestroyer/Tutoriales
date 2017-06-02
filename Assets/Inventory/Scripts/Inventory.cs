@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Inventory : MonoBehaviour {
     [SerializeField]
     private Database database; //Referencia a la base de datos
     [SerializeField]
     private GameObject slotPrefab; //Referencia al prefab del slot
+    [SerializeField]
+    private Transform InventoryPanel; //Referencia al Panel de Inventario
     [SerializeField]
     private List<SlotInfo> slotInfoList; // Lista con la informacion de todos los slots (inventario propiamente dicho)
     [SerializeField]
@@ -16,6 +18,7 @@ public class Inventory : MonoBehaviour {
 
     private void Start()
     {
+        
         slotInfoList = new List<SlotInfo>();
         if (PlayerPrefs.HasKey("inventory"))
         {
@@ -31,9 +34,10 @@ public class Inventory : MonoBehaviour {
     {
         for (int i = 0; i < capacity; i++)
         {
-            GameObject slot = Instantiate<GameObject>(slotPrefab, this.transform);
-            Slot newSlot = slotPrefab.GetComponent<Slot>();
+            GameObject slot = Instantiate<GameObject>(slotPrefab, InventoryPanel );
+            Slot newSlot = slot.GetComponent<Slot>();
             newSlot.SetUp(i);
+            newSlot.database = database;
             SlotInfo newSlotInfo = newSlot.slotInfo;
             slotInfoList.Add(newSlotInfo);
         }
@@ -71,11 +75,16 @@ public class Inventory : MonoBehaviour {
         {
             if (slotInfo.isEmpty)
             {
-                slotInfo.EmptySlot();
+                //slotInfo.EmptySlot();
                 return slotInfo;
             }
         }
         return null;
+    }
+
+    private Slot FindSlot(int id)
+    {
+        return InventoryPanel.GetChild(id).GetComponent<Slot>();
     }
 
     public void AddItem(int itemId)
@@ -89,6 +98,8 @@ public class Inventory : MonoBehaviour {
                 slotInfo.amount++;
                 slotInfo.itemId = itemId;
                 slotInfo.isEmpty = false;
+
+                FindSlot(slotInfo.id).UpdateUI();
             }
         }
     }
@@ -106,6 +117,22 @@ public class Inventory : MonoBehaviour {
             {
                 slotInfo.amount--;
             }
+            FindSlot(slotInfo.id).UpdateUI();
+        }
+    }
+    public void RemoveItem(int itemId, SlotInfo slotInfo)
+    {
+        if (slotInfo != null)
+        {
+            if (slotInfo.amount == 1)
+            {
+                slotInfo.EmptySlot();
+            }
+            else
+            {
+                slotInfo.amount--;
+            }
+            FindSlot(slotInfo.id).UpdateUI();
         }
     }
 
@@ -117,6 +144,45 @@ public class Inventory : MonoBehaviour {
         PlayerPrefs.SetString("inventory", jsonString);
     }
 
+
+    public void SwapSlots(int id_o, int id_d, Transform image_o, Transform image_d)
+    {
+        //SWAP IMAGENES
+        image_o.SetParent(InventoryPanel.GetChild(id_d));
+        image_d.SetParent(InventoryPanel.GetChild(id_o));
+        image_o.localPosition = Vector3.zero;
+        image_d.localPosition = Vector3.zero;
+
+        if (id_o != id_d)
+        {
+            SlotInfo origin = slotInfoList[id_o];
+            SlotInfo destination = slotInfoList[id_d];
+
+            //SWAP EN INVENTARIO
+            slotInfoList[id_o] = destination;
+            slotInfoList[id_o].id = id_o;
+            slotInfoList[id_d] = origin;
+            slotInfoList[id_d].id = id_d;
+
+            //SWAP EN LOS SLOTS BASADOS EN LOS CAMBIOS EN EL INVENTARIO
+
+            Slot originSlot = InventoryPanel.GetChild(id_o).GetComponent<Slot>();
+            originSlot.slotInfo = slotInfoList[id_o];
+            Slot destinationSlot = InventoryPanel.GetChild(id_d).GetComponent<Slot>();
+            destinationSlot.slotInfo = slotInfoList[id_d];
+
+            originSlot.itemImage = image_d.GetComponent<Image>();
+            destinationSlot.itemImage = image_o.GetComponent<Image>();
+
+            originSlot.amountText = originSlot.itemImage.transform.GetChild(0).GetComponent<Text>();
+            destinationSlot.amountText = destinationSlot.itemImage.transform.GetChild(0).GetComponent<Text>();
+
+
+        }
+
+    }
+
+
     private struct InventoryWrapper
     {
         public List<SlotInfo> slotInfoList;
@@ -126,6 +192,11 @@ public class Inventory : MonoBehaviour {
     public void TestAdd()
     {
         AddItem(1);
+    }
+    [ContextMenu("Test Add - itemId = 2")]
+    public void TestAdd2()
+    {
+        AddItem(2);
     }
     [ContextMenu("Test Remove - itemId = 1")]
     public void TestRemove()

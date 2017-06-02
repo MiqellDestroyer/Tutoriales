@@ -31,6 +31,7 @@ public class Item
     public ItemType itemType;
     public Stats stats;
     public Vector2 scrollPos;
+    public Sprite itemImage;
     [System.Serializable]
     public struct Stats
     {

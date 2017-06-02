@@ -13,8 +13,8 @@ public class ItemWindow : EditorWindow {
     {
         database = db;
         window = GetWindow<ItemWindow>();
-        window.maxSize = new Vector2(300, 360);
-        window.minSize = new Vector2(300, 360);
+        window.maxSize = new Vector2(300, 380);
+        window.minSize = new Vector2(300, 380);
         newItem = new Item();
     }
 
@@ -54,6 +54,12 @@ public class ItemWindow : EditorWindow {
         GUILayout.Label("Name: ");
         item.name = EditorGUILayout.TextField(item.name, options);
         EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Item Image: ");
+        item.itemImage = (Sprite)EditorGUILayout.ObjectField(item.itemImage, typeof(Sprite), false);
+        EditorGUILayout.EndHorizontal();
+
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Type: ");
         item.itemType = (Item.ItemType)EditorGUILayout.EnumPopup(item.itemType, options);

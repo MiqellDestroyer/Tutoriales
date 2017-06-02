@@ -14,13 +14,14 @@ public class ItemModifyWindow : EditorWindow {
     {
         database = db;
         window = GetWindow<ItemModifyWindow>();
-        window.maxSize = new Vector2(300, 345);
-        window.minSize = new Vector2(300, 345);
+        window.maxSize = new Vector2(300, 360);
+        window.minSize = new Vector2(300, 360);
         databaseItem = item;
         newItem = new Item();
         newItem.id = item.id;
         newItem.name = item.name;
         newItem.itemType = item.itemType;
+        newItem.itemImage = item.itemImage;
         newItem.isStackable = item.isStackable;
         newItem.description = item.description;
        
@@ -53,6 +54,12 @@ public class ItemModifyWindow : EditorWindow {
         GUILayout.Label("Name: ");
         item.name = EditorGUILayout.TextField(item.name, options);
         EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Item Image: ");
+        item.itemImage = (Sprite)EditorGUILayout.ObjectField(item.itemImage, typeof(Sprite), false);
+        EditorGUILayout.EndHorizontal();
+
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Type: ");
         item.itemType = (Item.ItemType)EditorGUILayout.EnumPopup(item.itemType, options);
@@ -101,6 +108,7 @@ public class ItemModifyWindow : EditorWindow {
         databaseItem.description = newItem.description;
         databaseItem.itemType = newItem.itemType;
         databaseItem.isStackable = newItem.isStackable;
+        databaseItem.itemImage = newItem.itemImage;
         databaseItem.stats = newItem.stats;
         EditorUtility.SetDirty(database);
         window.Close();
