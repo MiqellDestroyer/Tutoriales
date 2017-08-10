@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9ac4b57b9907e34b8d089151f51b69e, type: 3}
+  m_Name: Linda - Welcome- Op1
+  m_EditorClassIdentifier: 
+  name: Linda
+  dialogues:
+  - sentence: "Es un gusto conocerte\t..."
+    options: []
+  - sentence: "... si necesitas atenci\xF3n medica, puedes encontrarla aqu\xED!. Estamos
+      muy capacitados para ayudarte..."
+    options: []
+  - sentence: '...muchos guerreros como tu tienden a lastimarse mucho en batalla'
+    options:
+    - text: Gracias, pero no ahora
+      optionNumber: 1
+      response: {fileID: 11400000, guid: 3927f5a6e1211814cb2f33212d4592c1, type: 2}
+    - text: Si, necesitare ayuda.
+      optionNumber: 2
+      response: {fileID: 0}
